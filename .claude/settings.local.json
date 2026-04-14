@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sf https://api.github.com/repos/VoltAgent/awesome-design-md/contents/design-md/linear.app)",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\([d[''''name''''] for d in data]\\)\")",
+      "Bash(curl -sf https://api.github.com/repos/VoltAgent/awesome-design-md/contents/design-md/stripe)",
+      "Bash(curl -sf \"https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/stripe/README.md\")",
+      "Bash(curl -sf \"https://api.github.com/repos/VoltAgent/awesome-design-md/branches\")",
+      "Bash(curl -sf https://api.github.com/repos/VoltAgent/awesome-design-md/contents/design-md/stripe?ref=add-new-designs)",
+      "Bash(curl -sf \"https://getdesign.md/stripe/design-md\")",
+      "Bash(curl -sf \"https://getdesign.md/design-md/stripe/preview.html\")",
+      "Bash(curl -sI https://getdesign.md/api/design/stripe)",
+      "Bash(curl -sf https://getdesign.md/stripe/design-md/raw)"
     ]
   }
 }

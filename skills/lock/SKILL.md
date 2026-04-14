@@ -9,7 +9,7 @@ The user has invoked `/design-drift:lock $ARGUMENTS`.
 
 ## Source resolution logic
 
-design-drift pulls from two sources. Use both when available, fall back gracefully.
+design-drift pulls from two bundled sources. Use both when available, fall back gracefully.
 
 | Sources available | Behavior |
 |-------------------|----------|
@@ -18,18 +18,28 @@ design-drift pulls from two sources. Use both when available, fall back graceful
 | SKILL.md ✗ + DESIGN.md ✓ | Token-only: colors, fonts, spacing extracted from DESIGN.md |
 | SKILL.md ✗ + DESIGN.md ✗ | Fail with helpful message |
 
+## Slug normalization
+
+Some brands have alternate filenames in the bundled designs. Try these mappings if the
+first lookup fails:
+
+| User types | Design file |
+|------------|-------------|
+| linear | linear.app.md |
+| mistral | mistral.ai.md |
+| runway | runwayml.md |
+| the-verge | theverge.md |
+
 ## Steps
 
-1. **Attempt to fetch DESIGN.md** from awesome-design-md:
-   ```
-   https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/$ARGUMENTS/DESIGN.md
-   ```
-   - If successful: create `.design-cache/` directory in project root, write content to `.design-cache/$ARGUMENTS.md`
-   - If failed: continue silently, note in the lock summary
+1. **Check for bundled DESIGN.md** in `skills/designs/` in the plugin directory:
+   - Try `skills/designs/$ARGUMENTS.md` first
+   - If not found, try slug variants: `$ARGUMENTS.app.md`, `$ARGUMENTS.ai.md`, etc.
+   - If found: create `.design-cache/` in project root, copy content to `.design-cache/$ARGUMENTS.md`
 
 2. **Check for bundled SKILL.md** at `skills/brands/$ARGUMENTS/SKILL.md` in the plugin directory.
 
-3. **If both fail**: tell the user "$ARGUMENTS not found in design-skills (87 brands) or awesome-design-md (59 brands). Check the brand name." Stop.
+3. **If both fail**: tell the user "$ARGUMENTS not found in design-skills (87 brands) or getdesign.md (66 brands). Check the brand name." Stop.
 
 4. **Determine coverage tier**:
    - Both sources: "Full enrichment"
@@ -63,5 +73,6 @@ design-drift pulls from two sources. Use both when available, fall back graceful
 
 ## Notes
 - `.design-lock` and `.design-cache/` are session-local — both in `.gitignore`
-- The scanner reads tokens dynamically from these files at runtime. No hardcoded data.
-- awesome-design-md brand slugs may differ from design-skills slugs. Try common variations if first fetch fails (e.g. "cal.com" vs "cal", "linear.app" vs "linear").
+- The scanner reads tokens dynamically from bundled files at runtime. No hardcoded data.
+- DESIGN.md files are sourced from getdesign.md (via `npx getdesign`) and bundled in `skills/designs/`.
+- 66 brands have bundled DESIGN.md. 87 brands have bundled SKILL.md. 121 brands total across both.

@@ -44,15 +44,44 @@ def find_lock() -> tuple:
     return None, {}
 
 
+# ── Slug normalization ────────────────────────────────────────────────────────
+
+# Maps user-facing brand slugs to getdesign.md template filenames (without .md)
+SLUG_MAP = {
+    "linear": "linear.app",
+    "mistral": "mistral.ai",
+    "runway": "runwayml",
+    "the-verge": "theverge",
+    "theverge": "theverge",
+    "x": "x.ai",
+    "together": "together.ai",
+    "opencode": "opencode.ai",
+    "mistral.ai": "mistral.ai",
+    "linear.app": "linear.app",
+    "runwayml": "runwayml",
+}
+
+def resolve_design_slug(brand: str) -> list:
+    """Return candidate design slugs to try for a given brand."""
+    candidates = [brand]
+    if brand in SLUG_MAP:
+        candidates.append(SLUG_MAP[brand])
+    # Also try common dot-suffixed variants
+    for suffix in (".app", ".ai", ".md"):
+        candidates.append(brand + suffix)
+    return list(dict.fromkeys(candidates))  # deduplicate, preserve order
+
+
 # ── Design system loading ─────────────────────────────────────────────────────
 
 def load_design_system(brand: str, project_root: Path, plugin_dir: str) -> str:
     """
     Load full design system text for the active brand.
 
-    Two sources, both optional, additive when combined:
-      1. SKILL.md  — constraint layer (MUST/SHOULD/NEVER + token tables)
-      2. DESIGN.md — atmosphere layer (visual tokens from awesome-design-md, cached at lock time)
+    Three sources, all optional, additive when combined:
+      1. SKILL.md      — constraint layer (MUST/SHOULD/NEVER + token tables)
+      2. DESIGN.md     — bundled atmosphere layer from getdesign.md (skills/designs/)
+      3. cached DESIGN — written to .design-cache/ at lock time (same content)
 
     Token extraction runs against the combined text regardless of which sources are present.
     This means:
@@ -66,6 +95,15 @@ def load_design_system(brand: str, project_root: Path, plugin_dir: str) -> str:
     if skill_path.exists():
         parts.append(skill_path.read_text())
 
+    # Check bundled designs (skills/designs/[slug].md) with slug normalization
+    designs_dir = Path(plugin_dir) / "skills" / "designs"
+    for slug in resolve_design_slug(brand):
+        design_path = designs_dir / f"{slug}.md"
+        if design_path.exists():
+            parts.append(design_path.read_text())
+            break
+
+    # Also check project-local cache (written at /design-drift:lock time)
     cached = project_root / ".design-cache" / f"{brand}.md"
     if cached.exists():
         parts.append(cached.read_text())
