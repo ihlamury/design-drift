@@ -1,6 +1,6 @@
 ---
 name: fetch
-description: Preview a DESIGN.md for any brand. Does not activate enforcement. Usage: /design-drift:fetch [brand].
+description: "Preview a DESIGN.md for any brand. Does not activate enforcement. Usage: /design-drift:fetch [brand]."
 ---
 
 # Design Drift — Fetch

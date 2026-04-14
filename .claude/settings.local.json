@@ -11,7 +11,8 @@
       "Bash(curl -sf \"https://getdesign.md/stripe/design-md\")",
       "Bash(curl -sf \"https://getdesign.md/design-md/stripe/preview.html\")",
       "Bash(curl -sI https://getdesign.md/api/design/stripe)",
-      "Bash(curl -sf https://getdesign.md/stripe/design-md/raw)"
+      "Bash(curl -sf https://getdesign.md/stripe/design-md/raw)",
+      "Bash(claude plugin:*)"
     ]
   }
 }

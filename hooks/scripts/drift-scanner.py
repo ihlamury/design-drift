@@ -336,8 +336,11 @@ def main():
         sys.exit(0)
 
     plugin_dir = os.environ.get(
-        "PLUGIN_DIR",
-        str(Path(os.path.abspath(__file__)).parent.parent.parent)
+        "CLAUDE_PLUGIN_ROOT",
+        os.environ.get(
+            "PLUGIN_DIR",
+            str(Path(os.path.abspath(__file__)).parent.parent.parent)
+        )
     )
 
     design_text = load_design_system(brand, project_root, plugin_dir)

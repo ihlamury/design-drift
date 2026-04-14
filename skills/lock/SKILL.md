@@ -1,6 +1,6 @@
 ---
 name: lock
-description: Lock a brand design system for the session. Activates drift enforcement on all subsequent UI writes. Supports 121 brands. Usage: /design-drift:lock [brand].
+description: "Lock a brand design system for the session. Activates drift enforcement on all subsequent UI writes. Supports 121 brands. Usage: /design-drift:lock [brand]."
 ---
 
 # Design Drift — Lock

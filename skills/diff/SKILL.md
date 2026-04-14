@@ -1,6 +1,6 @@
 ---
 name: diff
-description: Token-by-token diff of a file against the locked design system. Usage: /design-drift:diff [file].
+description: "Token-by-token diff of a file against the locked design system. Usage: /design-drift:diff [file]."
 ---
 
 # Design Drift — Diff
