@@ -1,0 +1,9 @@
+{
+  "hooks": [
+    {
+      "event": "PostToolUse",
+      "tools": ["Write", "Edit", "MultiEdit"],
+      "command": "python3 $PLUGIN_DIR/hooks/scripts/drift-scanner.py"
+    }
+  ]
+}

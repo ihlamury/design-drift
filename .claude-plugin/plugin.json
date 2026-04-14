@@ -1,0 +1,13 @@
+{
+  "name": "design-drift",
+  "description": "Lock your design system, prevent drift. 121 brands. Enforces constraints on every UI write via PostToolUse hooks. Powered by ihlamury/design-skills + VoltAgent/awesome-design-md.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Yagiz Ihlamur",
+    "url": "https://github.com/ihlamury"
+  },
+  "homepage": "https://github.com/ihlamury/design-drift",
+  "repository": "https://github.com/ihlamury/design-drift",
+  "license": "MIT",
+  "keywords": ["design-system", "ui", "vibe-coding", "design-drift", "claude-code"]
+}
