@@ -29,10 +29,11 @@ def is_ui_file(filepath: str) -> bool:
 
 # ── Lock file ─────────────────────────────────────────────────────────────────
 
-def find_lock() -> tuple:
-    """Walk up from CWD to find .design-lock. Returns (project_root, config)."""
+def find_lock(filepath: str) -> tuple:
+    """Walk up from the written file, then CWD, to find .design-lock. Returns (project_root, config)."""
+    start = Path(filepath).parent
     cwd = Path(os.getcwd())
-    for parent in [cwd] + list(cwd.parents):
+    for parent in [start] + list(start.parents) + [cwd] + list(cwd.parents):
         lock = parent / ".design-lock"
         if lock.exists():
             config = {}
@@ -327,7 +328,7 @@ def main():
     if not filepath or not is_ui_file(filepath):
         sys.exit(0)
 
-    project_root, config = find_lock()
+    project_root, config = find_lock(filepath)
     if not config:
         sys.exit(0)
 
@@ -357,7 +358,13 @@ def main():
 
     violations = scan(content, tokens, filepath, brand)
     if violations:
-        print(_format_output(violations, filepath, brand), file=sys.stderr)
+        # stderr on exit 0 never reaches the agent; additionalContext does.
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PostToolUse",
+                "additionalContext": _format_output(violations, filepath, brand),
+            }
+        }))
 
     sys.exit(0)
 
